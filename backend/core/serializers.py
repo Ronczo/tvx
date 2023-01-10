@@ -4,6 +4,8 @@ from rest_framework import serializers
 
 
 class BudgetSerializer(serializers.ModelSerializer):
+    transaction = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = Budget
         fields = "__all__"
