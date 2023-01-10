@@ -1,0 +1,31 @@
+version: "3.3"
+
+services:
+  db:
+    image: postgres:13
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    env_file:
+      - .env
+    ports:
+      - "${POSTGRES_PORT}:5432"
+  api:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/backend
+    command: sh -c "poetry run python manage.py migrate && poetry run python /backend/manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - db
+    links:
+      - db
+    env_file:
+      - .env
+  web:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/frontend
+
