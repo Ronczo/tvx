@@ -18,7 +18,11 @@ class Budget(models.Model):
         transactions = Transaction.objects.filter(budget=self)
         incomes_value = transactions.filter(kind="income").aggregate(value=Sum("value"))
         expanes_value = transactions.filter(kind="expanse").aggregate(value=Sum("value"))
-        return incomes_value["value"] - expanes_value["value"]
+        if not incomes_value["value"]:
+            incomes_value["value"] = 0
+        if not expanes_value["value"]:
+            expanes_value["value"] = 0
+        return incomes_value.get("value", 0) - expanes_value.get("value", 0)
 
 
 class TransactionType(models.TextChoices):
@@ -47,7 +51,7 @@ class Transaction(models.Model):
     )
 
     def __str__(self):
-        return f"{self.value}$ {self.kind} in {self.budget.user}' budget"
+        return f"{self.value}$ {self.kind} in {self.budget.user}' budget {self.budget.id}"
 
     @property
     def get_category(self):
