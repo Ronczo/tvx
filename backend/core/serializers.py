@@ -3,9 +3,13 @@ from rest_framework import serializers
 
 
 class TransactionSerializer(serializers.ModelSerializer):
+    category = serializers.CharField(source="get_category")
+
     class Meta:
         model = Transaction
-        fields = "__all__"
+        exclude = [
+            "budget",
+        ]
         ref_name = "Transaction serializer"
 
 

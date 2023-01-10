@@ -48,3 +48,7 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.value}$ {self.kind} in {self.budget.user}' budget"
+
+    @property
+    def get_category(self):
+        return self.category.name
