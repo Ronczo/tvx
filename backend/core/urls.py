@@ -1,6 +1,7 @@
 from authorization.views import UserViewSet
+from core.views import BudgetViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-# router.register("user", UserViewSet, basename="user")
+router.register("budget", BudgetViewSet, basename="user")
 urlpatterns = router.urls
