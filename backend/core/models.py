@@ -2,6 +2,7 @@ import uuid
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Sum
 
 
 class Budget(models.Model):
@@ -11,6 +12,13 @@ class Budget(models.Model):
 
     def __str__(self):
         return f"Budget of {self.user.username}"
+
+    @property
+    def budget_balance(self):
+        transactions = Transaction.objects.filter(budget=self)
+        incomes_value = transactions.filter(kind="income").aggregate(value=Sum("value"))
+        expanes_value = transactions.filter(kind="expanse").aggregate(value=Sum("value"))
+        return incomes_value["value"] - expanes_value["value"]
 
 
 class TransactionType(models.TextChoices):
