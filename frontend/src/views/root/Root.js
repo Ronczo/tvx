@@ -1,6 +1,7 @@
 import React from "react";
-import { BrowserRouter, Routes } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "../../components/header/Header";
+import LoginPanel from "../../components/loginPanel/loginPanel";
 
 class Root extends React.Component {
 
@@ -9,11 +10,11 @@ class Root extends React.Component {
         return (
             <BrowserRouter>
                 <Header/>
-                    <Routes>
-                        {/*<Route path="/" element={<TwittersView/>}/>*/}
-                        {/*<Route path="/articles" element={<ArticlesView/>}/>*/}
-                        {/*<Route path="/notes" element={<NotesView/>}/>*/}
-                    </Routes>
+                <LoginPanel/>
+                    {/*<Routes>*/}
+                    {/*    /!*<Route path="/articles" element={<ArticlesView/>}/>*!/*/}
+                    {/*    /!*<Route path="/notes" element={<NotesView/>}/>*!/*/}
+                    {/*</Routes>*/}
             </BrowserRouter>
         );
     }
