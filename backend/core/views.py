@@ -12,7 +12,6 @@ from django.db.models import QuerySet
 from django_filters import rest_framework
 from rest_framework import mixins, status
 from rest_framework.decorators import action
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
