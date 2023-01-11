@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import "./BudgetDetail.css"
-import AddForm from "../../components/AddForm/AddForm";
+import AddForm from "../../components/Forms/AddForm/AddForm";
 
 const BudgetDetail = () => {
     const accessToken = localStorage.getItem("access")
