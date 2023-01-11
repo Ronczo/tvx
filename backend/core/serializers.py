@@ -40,6 +40,15 @@ class BudgetSerializer(serializers.ModelSerializer):
         ref_name = "Budget serializer"
 
 
+class BudgetShareSerializer(serializers.ModelSerializer):
+    budget = serializers.CharField()
+
+    class Meta:
+        model = Budget
+        fields = ["budget"]
+        ref_name = "Budget serializer"
+
+
 class BudgetCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Budget

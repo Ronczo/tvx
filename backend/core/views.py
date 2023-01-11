@@ -3,6 +3,7 @@ from core.models import Budget, Transaction
 from core.serializers import (
     BudgetCreateSerializer,
     BudgetSerializer,
+    BudgetShareSerializer,
     TransactionCreateSerializer,
     TransactionSerializer,
 )
@@ -49,6 +50,21 @@ class BudgetViewSet(
 
         serializer: ModelSerializer = BudgetSerializer(instance=queryset, many=True)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(methods=["POST"], detail=False, url_path="share")
+    def share(self, request):
+        serializer = BudgetShareSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            budget_id = request.data.get("budget")
+            try:
+                budget = Budget.objects.get(id=budget_id)
+                user_id: str = str(request.user.id)
+                user: User = User.objects.get(id=user_id)
+                budget.allowed_to.add(user)
+                budget.save()
+                return Response(f"Budget shared with user {user}", status=status.HTTP_200_OK)
+            except Budget.DoesNotExist:
+                return Response("There is no budget with given id")
 
 
 class TransactionViewSet(
