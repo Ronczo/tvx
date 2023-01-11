@@ -43,10 +43,16 @@ const LoginPanel = () => {
                 }),
             }).then(response => {
                 if (response.status === 200) {
+                    console.log(response)
                     setMessage("You're logged in")
+
                 } else {
                     setMessage("Something went wrong")
                 }
+                return response.json()
+            }).then((data) => {
+                localStorage.setItem('access', data["access"]);
+                localStorage.setItem('refresh', data["refresh"]);
             });
         } catch (err) {
             console.log(err);
