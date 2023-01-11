@@ -1,6 +1,11 @@
 from core.filters import BudgetFilter
 from core.models import Budget, Transaction
-from core.serializers import BudgetCreateSerializer, BudgetSerializer
+from core.serializers import (
+    BudgetCreateSerializer,
+    BudgetSerializer,
+    TransactionCreateSerializer,
+    TransactionSerializer,
+)
 from django.contrib.auth.models import User
 from django.db.models import QuerySet
 from django_filters import rest_framework
@@ -49,8 +54,16 @@ class BudgetViewSet(
 class TransactionViewSet(
     mixins.RetrieveModelMixin,
     mixins.ListModelMixin,
+    mixins.CreateModelMixin,
     GenericViewSet,
 ):
     permission_classes = (IsAuthenticated,)
-    serializer_class = BudgetSerializer
+    serializer_class = TransactionSerializer
     queryset = Transaction.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        write_serializer = TransactionCreateSerializer(data=request.data)
+        if write_serializer.is_valid(raise_exception=True):
+            instance = write_serializer.save()
+            read_serializer = self.serializer_class(instance=instance)
+            return Response(read_serializer.data, status=status.HTTP_201_CREATED)
