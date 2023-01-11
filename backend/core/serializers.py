@@ -14,7 +14,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 
 
 class BudgetSerializer(serializers.ModelSerializer):
-    transaction = TransactionSerializer(many=True)
+    transactions = TransactionSerializer(many=True)
     balance = serializers.IntegerField(source="budget_balance")
 
     class Meta:

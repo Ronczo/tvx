@@ -45,9 +45,9 @@ class Transaction(models.Model):
         max_length=7,
         choices=TransactionType.choices,
     )
-    budget = models.ForeignKey(Budget, related_name="transaction", on_delete=models.PROTECT)
+    budget = models.ForeignKey(Budget, related_name="transactions", on_delete=models.PROTECT)
     category = models.ForeignKey(
-        TransactionCategory, related_name="transaction", on_delete=models.PROTECT
+        TransactionCategory, related_name="transactions", on_delete=models.PROTECT
     )
 
     def __str__(self):
