@@ -10,12 +10,6 @@ body {
   height: 100%;
 }
 
-#root {
-  align-items: center;
-  display: flex;
-  height: 100%;
-  justify-content: center;
-}
 
 .loginPanel {
   background: #fff;
@@ -25,7 +19,19 @@ body {
   padding-bottom: 66px;
   padding-top: 46px;
   text-align: center;
-  width: 90%;
+  width: 20%;
+}
+
+.userInfo {
+  background: #ffff;
+  border-radius: 4px;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+  max-width: 615px;
+  padding-bottom: 66px;
+  padding-top: 46px;
+  text-align: center;
+  width: 20%;
+  height: 80%;
 }
 
 .loginPanel > .form {

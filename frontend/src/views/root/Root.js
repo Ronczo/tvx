@@ -1,23 +1,23 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, {useState} from "react";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Header from "../../components/header/Header";
 import LoginPanel from "../../components/loginPanel/loginPanel";
+import Home from "../home/Home";
 
-class Root extends React.Component {
+const Root = () => {
 
 
-    render() {
-        return (
-            <BrowserRouter>
-                <Header/>
-                <LoginPanel/>
-                    {/*<Routes>*/}
-                    {/*    /!*<Route path="/articles" element={<ArticlesView/>}/>*!/*/}
-                    {/*    /!*<Route path="/notes" element={<NotesView/>}/>*!/*/}
-                    {/*</Routes>*/}
-            </BrowserRouter>
-        );
-    }
+    return (
+        <BrowserRouter>
+            <Header/>
+            <LoginPanel />
+            <Routes>
+                {/*<Route path="/" element={<Home/>}/>*/}
+                {/*<Route path="/notes" element={<NotesView/>}/>*/}
+            </Routes>
+        </BrowserRouter>
+    );
+
 }
 
 export default Root;
