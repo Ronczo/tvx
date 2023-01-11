@@ -4,6 +4,7 @@ import AddForm from "../../components/Forms/Transaction/AddForm/AddForm";
 import {NavLink} from "react-router-dom";
 
 const BudgetDetail = () => {
+
     const accessToken = localStorage.getItem("access")
     const split_url = window.location.href.split("/")
     const itemID = split_url[split_url.length - 1];
@@ -53,6 +54,12 @@ const BudgetDetail = () => {
             console.log(err);
         }
     }
+        if (!accessToken) {
+        return (
+            <div className={"notLogged"}>
+                <p>Log in first</p>
+            </div>
+        ) } else {
         return (
             <div>
                 <div>
@@ -67,7 +74,7 @@ const BudgetDetail = () => {
                             <p key={`transaction-${transaction.id}`}>Category: {transaction.category}</p>
                             <p key={`transaction-${transaction.id}`}>Kind: {transaction.kind}</p>
                             <p key={`transaction-${transaction.id}`}>Value: {transaction.value}</p>
-                            {/*<button className={"editButton"} onClick={() => deleteTransaction(transaction.id)}>Edit transaction</button>*/}
+
                             <button className={"deleteButton"} onClick={() => deleteTransaction(transaction.id)}>Delete transaction</button>
                             <hr/>
                         </>
@@ -77,5 +84,5 @@ const BudgetDetail = () => {
             </div>
         )
     }
-
+}
     export default BudgetDetail;

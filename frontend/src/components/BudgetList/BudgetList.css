@@ -63,7 +63,22 @@
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin-left: 13px;
-    border-radius: 10px
+    border-radius: 10px;
+    margin: 10px;
+    width: 60%;
+}
+
+.deleteButton {
+    background-color: red; /* Green */
+    border: none;
+    color: white;
+    padding: 3px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 10px;
+    margin: 10px;
+
 
 }

@@ -8,12 +8,10 @@ import jwt_decode from "jwt-decode";
 
 const BudgetList = () => {
     const accessToken = localStorage.getItem("access")
-    const [access, setAccess] = useState(accessToken);
     const [budgets, setBudgets] = useState([]);
     const [nextPage, setNextPage] = useState("");
     const [previousPage, setPreviousPage] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
-
 
 
     const openModal = () => {
@@ -24,6 +22,22 @@ const BudgetList = () => {
         setModalOpen(false)
     }
 
+    const deleteBudget = async (budgetID) => {
+        try {
+            let res = await fetch(`http://127.0.0.1:8000/api/budget/${budgetID}/`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+            }).then(response => {
+                window.location.reload(false)
+
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     useEffect(() => {
 
         if (accessToken) {
@@ -31,7 +45,7 @@ const BudgetList = () => {
                 let res = fetch(`http://127.0.0.1:8000/api/budget/my-budgets`, {
                     method: "GET",
                     headers: {
-                        Authorization: `Bearer ${access}`
+                        Authorization: `Bearer ${accessToken}`
                     }
                 }).then(response => response.json()).then(data => {
                     setBudgets(data["results"])
@@ -42,27 +56,29 @@ const BudgetList = () => {
         }
     }, []);
 
-    if (!access) {
+    if (!accessToken) {
         return (
             <div className={"notLogged"}>
                 <p>Log in first</p>
             </div>
         )
     } else {
-            const decoded = jwt_decode(access)
-            const user_id = decoded["user_id"]
+        const decoded = jwt_decode(accessToken)
+        const user_id = decoded["user_id"]
         return (
             <div className={"listWrapper"}>
                 <div className={"list"}>
                     <p className={"tableHeader"}>Your budgets:</p>
                     {modalOpen ? <button onClick={closeModal}>Hide form</button> :
-                        <button className={"addButton"} onClick={openModal}>Add transaction</button>}
-                    {modalOpen ? <AddBudgetForm access={access} user={user_id}/> : ""}
+                        <button className={"addButton"} onClick={openModal}>Add budget</button>}
+                    {modalOpen ? <AddBudgetForm access={accessToken} user={user_id}/> : ""}
                     {budgets.map(item => (
 
                         <>
-                            <p key={`item-${item.id}`} className={"item"}>- {item.name}
+                            <p key={`item-${item.id}`} className={"item"}>- {item.name} (balance: {item.balance})
+                                <br />
                                 <NavLink className={"navLink"} to={`/budget-details/${item.id}`}>Show</NavLink>
+                                <button className={"deleteButton"} onClick={() => deleteBudget(item.id)}>Delete</button>
                             </p>
                         </>
                     ))}
