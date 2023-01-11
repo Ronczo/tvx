@@ -5,6 +5,7 @@ import {NavLink} from "react-router-dom";
 
 import AddBudgetForm from "../Forms/Budget/AddForm/AddForm";
 import jwt_decode from "jwt-decode";
+import ShareForm from "../Forms/Budget/ShareForm/ShareForm";
 
 const BudgetList = () => {
     const accessToken = localStorage.getItem("access")
@@ -13,6 +14,8 @@ const BudgetList = () => {
     const [nextPage, setNextPage] = useState("");
     const [previousPage, setPreviousPage] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
+    const [modalShareOpen, setModalShareOpen] = useState(false);
+    const [users, setUsers] = useState(false);
 
 
     const openModal = () => {
@@ -22,6 +25,15 @@ const BudgetList = () => {
     const closeModal = () => {
         setModalOpen(false)
     }
+
+    const openShareModal = () => {
+        setModalShareOpen(true)
+    }
+
+    const closeShareModal = () => {
+        setModalShareOpen(false)
+    }
+
 
     const deleteBudget = async (budgetID) => {
         try {
@@ -62,12 +74,26 @@ const BudgetList = () => {
                     },
                 }).then(response => response.json()).then(data => {
                     setSharedBudgets(data["results"])
-                    console.log(data['results'])
                 });
             } catch (err) {
                 console.log(err);
             }
         }
+
+        try {
+            let res = fetch(`http://127.0.0.1:8000/auth/user`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            }).then(response => response.json()).then(data => {
+                setUsers(data)
+                console.log(data)
+            });
+        } catch (err) {
+            console.log(err);
+        }
+
     }, []);
 
     if (!accessToken) {
@@ -93,6 +119,9 @@ const BudgetList = () => {
                                 <br/>
                                 <NavLink className={"navLink"} to={`/budget-details/${item.id}`}>Show</NavLink>
                                 <button className={"deleteButton"} onClick={() => deleteBudget(item.id)}>Delete</button>
+                                {modalShareOpen ? <button onClick={closeShareModal}>Hide form</button> :
+                                    <button className={"addButton"} onClick={openShareModal}>Share budget</button>}
+                                {modalShareOpen ? <ShareForm users={users} access={accessToken} budget={item.id}/> : ""}
                             </p>
                         </>
                     ))}
@@ -108,6 +137,7 @@ const BudgetList = () => {
                                 <br/>
                                 <NavLink className={"navLink"} to={`/budget-details/${item.id}`}>Show</NavLink>
                                 <button className={"deleteButton"} onClick={() => deleteBudget(item.id)}>Delete</button>
+
                             </p>
                         </>
                     ))}

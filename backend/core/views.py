@@ -55,16 +55,16 @@ class BudgetViewSet(
     def share(self, request):
         serializer = BudgetShareSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            budget_id = request.data.get("budget")
+            budget_id: str = request.data.get("budget")
+            user_id: str = request.data.get("user")
             try:
                 budget = Budget.objects.get(id=budget_id)
-                user_id: str = str(request.user.id)
                 user: User = User.objects.get(id=user_id)
                 budget.allowed_to.add(user)
                 budget.save()
                 return Response(f"Budget shared with user {user}", status=status.HTTP_200_OK)
-            except Budget.DoesNotExist:
-                return Response("There is no budget with given id")
+            except (Budget.DoesNotExist, User.DoesNotExist):
+                return Response("There is no budget or User with given id")
 
     @action(methods=["GET"], detail=False, url_path="shared-with-me")
     def shared_with_me(self, request):

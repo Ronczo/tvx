@@ -39,8 +39,6 @@ const AddBudgetForm = ({access, user}) => {
                 </div>
                 <button className="primary" onClick={handleAddBudget}>Add budget</button>
             </form>
-
-            {/*<div className="message">{message ? <p>{message}</p> : null}</div>*/}
         </div>
     )
 }

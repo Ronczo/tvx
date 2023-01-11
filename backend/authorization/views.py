@@ -22,3 +22,7 @@ class UserViewSet(
             instance = write_serializer.save()
             read_serializer = self.serializer_class(instance=instance)
             return Response(read_serializer.data, status=status.HTTP_201_CREATED)
+
+    def list(self, request, *args, **kwargs):
+        self.pagination_class = None
+        return super().list(request, *args, **kwargs)
