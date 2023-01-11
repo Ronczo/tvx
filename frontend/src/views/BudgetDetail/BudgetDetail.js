@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {NavLink} from "react-router-dom";
+import "./BudgetDetail.css"
 import AddForm from "../../components/AddForm/AddForm";
 
 const BudgetDetail = () => {
@@ -37,26 +37,44 @@ const BudgetDetail = () => {
         }
     }, []);
 
-    return (
-        <div>
-            <div>
-                <h2>{item.name}</h2>
-                <h3>Balance: {item.balance}</h3>
-                <h3>Transactions:</h3>
-                {modalOpen ? <button onClick={closeModal}>Hide form</button> :
-                    <button onClick={openModal}>Add transaction</button>}
-                {modalOpen ? <AddForm budgetID={itemID} access={accessToken}/> : ""}
-                {transactions.map(transaction => (
-                    <>
-                        <p key={`transaction-${transaction.id}`}>Category: {transaction.category}</p>
-                        <p key={`transaction-${transaction.id}`}>Kind: {transaction.kind}</p>
-                        <p key={`transaction-${transaction.id}`}>Value: {transaction.value}</p>
-                        <hr/>
-                    </>
-                ))}
-            </div>
-        </div>
-    )
-}
+    const deleteTransaction = async (transactionID) => {
+        try {
+            let res = await fetch(`http://127.0.0.1:8000/api/transaction/${transactionID}/`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+            }).then(response => {
+                window.location.reload(false)
 
-export default BudgetDetail;
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+
+        return (
+            <div>
+                <div>
+                    <h2>{item.name}</h2>
+                    <h3>Balance: {item.balance}</h3>
+                    <h3>Transactions:</h3>
+                    {modalOpen ? <button onClick={closeModal}>Hide form</button> :
+                        <button className={"addButton"} onClick={openModal}>Add transaction</button>}
+                    {modalOpen ? <AddForm budgetID={itemID} access={accessToken}/> : ""}
+                    {transactions.map(transaction => (
+                        <>
+                            <p key={`transaction-${transaction.id}`}>Category: {transaction.category}</p>
+                            <p key={`transaction-${transaction.id}`}>Kind: {transaction.kind}</p>
+                            <p key={`transaction-${transaction.id}`}>Value: {transaction.value}</p>
+                            <button className={"deleteButton"} onClick={() => deleteTransaction(transaction.id)}>Delete transaction</button>
+                            <hr/>
+                        </>
+                    ))}
+                </div>
+            </div>
+        )
+    }
+
+    export default BudgetDetail;
