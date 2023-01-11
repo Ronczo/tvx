@@ -99,7 +99,7 @@ const BudgetList = () => {
                 </div>
 
                 <div className={"list"}>
-                    <p>Budgets shared with you:</p>
+                    <p className={"tableHeader"}>Budgets shared with you:</p>
                     {sharedBudgets.map(item => (
 
                         <>

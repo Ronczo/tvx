@@ -21,6 +21,7 @@ from rest_framework.viewsets import GenericViewSet
 class BudgetViewSet(
     mixins.RetrieveModelMixin,
     mixins.ListModelMixin,
+    mixins.DestroyModelMixin,
     GenericViewSet,
 ):
     permission_classes = (IsAuthenticated,)
