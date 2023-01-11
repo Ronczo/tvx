@@ -10,7 +10,6 @@ const LoginPanel = () => {
     const [password, setPassword] = useState("");
     const [access, setAccess] = useState(access_token);
     const [message, setMessage] = useState("");
-    // const [user, setUser] = useState("");
 
     useEffect(() => {
         if (access_token) {
