@@ -55,6 +55,7 @@ class TransactionViewSet(
     mixins.RetrieveModelMixin,
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
     GenericViewSet,
 ):
     permission_classes = (IsAuthenticated,)
