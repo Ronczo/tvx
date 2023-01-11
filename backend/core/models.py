@@ -7,6 +7,7 @@ from django.db.models import Sum
 
 class Budget(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=100)
     user = models.ForeignKey(User, related_name="budgets", on_delete=models.CASCADE)
     allowed_to = models.ManyToManyField(User, related_name="budget", null=True, blank=True)
 

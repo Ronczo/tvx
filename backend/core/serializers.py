@@ -20,7 +20,9 @@ class BudgetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Budget
-        fields = "__all__"
+        exclude = [
+            "allowed_to",
+        ]
         ref_name = "Budget serializer"
 
 
