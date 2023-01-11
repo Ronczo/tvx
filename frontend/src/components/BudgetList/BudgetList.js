@@ -3,12 +3,26 @@ import "./BudgetList.css"
 
 import {NavLink} from "react-router-dom";
 
+import AddBudgetForm from "../Forms/Budget/AddForm/AddForm";
+import jwt_decode from "jwt-decode";
+
 const BudgetList = () => {
     const accessToken = localStorage.getItem("access")
     const [access, setAccess] = useState(accessToken);
     const [budgets, setBudgets] = useState([]);
     const [nextPage, setNextPage] = useState("");
-    const [previourPage, setPreviousPage] = useState("");
+    const [previousPage, setPreviousPage] = useState("");
+    const [modalOpen, setModalOpen] = useState(false);
+
+
+
+    const openModal = () => {
+        setModalOpen(true)
+    }
+
+    const closeModal = () => {
+        setModalOpen(false)
+    }
 
     useEffect(() => {
 
@@ -35,10 +49,15 @@ const BudgetList = () => {
             </div>
         )
     } else {
+            const decoded = jwt_decode(access)
+            const user_id = decoded["user_id"]
         return (
             <div className={"listWrapper"}>
                 <div className={"list"}>
                     <p className={"tableHeader"}>Your budgets:</p>
+                    {modalOpen ? <button onClick={closeModal}>Hide form</button> :
+                        <button className={"addButton"} onClick={openModal}>Add transaction</button>}
+                    {modalOpen ? <AddBudgetForm access={access} user={user_id}/> : ""}
                     {budgets.map(item => (
 
                         <>

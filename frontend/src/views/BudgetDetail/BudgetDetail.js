@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import "./BudgetDetail.css"
-import AddForm from "../../components/Forms/AddForm/AddForm";
+import AddForm from "../../components/Forms/Transaction/AddForm/AddForm";
 import {NavLink} from "react-router-dom";
 
 const BudgetDetail = () => {
