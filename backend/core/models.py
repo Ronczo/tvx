@@ -13,6 +13,9 @@ class Budget(models.Model):
     def __str__(self):
         return f"Budget of {self.user.username}"
 
+    def get_username(self):
+        return self.user.username
+
     @property
     def budget_balance(self):
         transactions = Transaction.objects.filter(budget=self)
