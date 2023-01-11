@@ -9,6 +9,7 @@ import jwt_decode from "jwt-decode";
 const BudgetList = () => {
     const accessToken = localStorage.getItem("access")
     const [budgets, setBudgets] = useState([]);
+    const [sharedBudgets, setSharedBudgets] = useState([]);
     const [nextPage, setNextPage] = useState("");
     const [previousPage, setPreviousPage] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
@@ -53,6 +54,19 @@ const BudgetList = () => {
             } catch (err) {
                 console.log(err);
             }
+            try {
+                let res = fetch(`http://127.0.0.1:8000/api/budget/shared-with-me/`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                }).then(response => response.json()).then(data => {
+                    setSharedBudgets(data["results"])
+                    console.log(data['results'])
+                });
+            } catch (err) {
+                console.log(err);
+            }
         }
     }, []);
 
@@ -76,7 +90,7 @@ const BudgetList = () => {
 
                         <>
                             <p key={`item-${item.id}`} className={"item"}>- {item.name} (balance: {item.balance})
-                                <br />
+                                <br/>
                                 <NavLink className={"navLink"} to={`/budget-details/${item.id}`}>Show</NavLink>
                                 <button className={"deleteButton"} onClick={() => deleteBudget(item.id)}>Delete</button>
                             </p>
@@ -86,7 +100,17 @@ const BudgetList = () => {
 
                 <div className={"list"}>
                     <p>Budgets shared with you:</p>
-                    <p className={"row"}>TU BEDZIE TABELA</p>
+                    {sharedBudgets.map(item => (
+
+                        <>
+                            <p key={`item-${item.id}`}
+                               className={"item"}>- {item.name} (balance: {item.balance})<br/>[Belongs to {item.user}]
+                                <br/>
+                                <NavLink className={"navLink"} to={`/budget-details/${item.id}`}>Show</NavLink>
+                                <button className={"deleteButton"} onClick={() => deleteBudget(item.id)}>Delete</button>
+                            </p>
+                        </>
+                    ))}
                 </div>
             </div>
         )
