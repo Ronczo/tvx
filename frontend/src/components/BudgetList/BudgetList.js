@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from "react";
 import "./BudgetList.css"
-import jwt_decode from "jwt-decode";
+
+import {NavLink} from "react-router-dom";
 
 const BudgetList = () => {
     const accessToken = localStorage.getItem("access")
     const [access, setAccess] = useState(accessToken);
     const [budgets, setBudgets] = useState([]);
+    const [nextPage, setNextPage] = useState("");
+    const [previourPage, setPreviousPage] = useState("");
 
     useEffect(() => {
 
@@ -17,8 +20,7 @@ const BudgetList = () => {
                         Authorization: `Bearer ${access}`
                     }
                 }).then(response => response.json()).then(data => {
-                    console.log(data)
-                    setBudgets(data)
+                    setBudgets(data["results"])
                 });
             } catch (err) {
                 console.log(err);
@@ -38,7 +40,12 @@ const BudgetList = () => {
                 <div className={"list"}>
                     <p className={"tableHeader"}>Your budgets:</p>
                     {budgets.map(item => (
-                        <p key={`movie-${item.id}`} className={"item"}>- {item.name}</p>
+
+                        <>
+                            <p key={`item-${item.id}`} className={"item"}>- {item.name}
+                                <NavLink className={"navLink"} to={`/budget-details/${item.id}`}>Show</NavLink>
+                            </p>
+                        </>
                     ))}
                 </div>
 

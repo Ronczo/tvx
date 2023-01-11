@@ -28,17 +28,17 @@
 }
 
 .item {
-      border-radius: 5px;
-  border: none;
-  color: #fff;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 18px;
-  font-weight: bold;
-  max-width: 420px;
-  outline: 0;
-  padding: 10px 0;
-  transition: background 0.3s;
-  width: 80%;
+    border-radius: 5px;
+    border: none;
+    color: #fff;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    max-width: 420px;
+    outline: 0;
+    padding: 10px 0;
+    transition: background 0.3s;
+    width: 80%;
     color: #1abc9c;
 }
 
@@ -48,7 +48,22 @@
     padding: 30px;
     border-radius: 10px;
     color: white;
-      font-family: 'Open Sans', sans-serif;
-  font-size: 18px;
-  font-weight: bold;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+.navLink {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 3px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-left: 13px;
+    border-radius: 10px
+
 }

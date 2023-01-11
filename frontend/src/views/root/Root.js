@@ -4,6 +4,7 @@ import Header from "../../components/header/Header";
 import LoginPanel from "../../components/loginPanel/loginPanel";
 import Home from "../home/Home";
 import "./Root.css"
+import BudgetDetail from "../BudgetDetail/BudgetDetail";
 
 
 const Root = () => {
@@ -15,6 +16,7 @@ const Root = () => {
 
                 <Routes>
                     <Route path="/" element={<Home/>}/>
+                    <Route path="/budget-details/:id" element={<BudgetDetail/>}/>
                 </Routes>
 
             </div>
