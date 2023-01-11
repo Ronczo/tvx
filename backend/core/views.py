@@ -44,8 +44,8 @@ class BudgetViewSet(
         queryset: QuerySet = Budget.objects.filter(user=user)
         page = self.paginate_queryset(queryset)
         if page is not None:
-            data = BudgetSerializer(instance=queryset, many=True).data
-            return self.get_paginated_response(data)
+            serializer = BudgetSerializer(instance=queryset, many=True)
+            return self.get_paginated_response(serializer.data)
 
         serializer: ModelSerializer = BudgetSerializer(instance=queryset, many=True)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -64,6 +64,18 @@ class BudgetViewSet(
                 return Response(f"Budget shared with user {user}", status=status.HTTP_200_OK)
             except Budget.DoesNotExist:
                 return Response("There is no budget with given id")
+
+    @action(methods=["GET"], detail=False, url_path="shared-with-me")
+    def shared_with_me(self, request):
+        user_id: str = str(request.user.id)
+        user: User = User.objects.get(id=user_id)
+        shared_budgets = Budget.objects.filter(allowed_to=user)
+        page = self.paginate_queryset(shared_budgets)
+        if page is not None:
+            serializer = BudgetSerializer(instance=shared_budgets, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.serializer_class(instance=shared_budgets, many=True)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class TransactionViewSet(
