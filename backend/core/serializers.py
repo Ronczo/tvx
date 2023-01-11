@@ -16,7 +16,15 @@ class TransactionSerializer(serializers.ModelSerializer):
 class BudgetSerializer(serializers.ModelSerializer):
     transactions = TransactionSerializer(many=True)
     balance = serializers.IntegerField(source="budget_balance")
+    user = serializers.CharField(source="get_username")
 
+    class Meta:
+        model = Budget
+        fields = "__all__"
+        ref_name = "Budget serializer"
+
+
+class BudgetCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Budget
         fields = "__all__"
