@@ -5,7 +5,7 @@ import jwt_decode from "jwt-decode";
 const BudgetList = () => {
     const accessToken = localStorage.getItem("access")
     const [access, setAccess] = useState(accessToken);
-    const [budgets, setBudgets] = useState(accessToken);
+    const [budgets, setBudgets] = useState([]);
 
     useEffect(() => {
 
@@ -34,9 +34,18 @@ const BudgetList = () => {
         )
     } else {
         return (
+            <div className={"listWrapper"}>
+                <div className={"list"}>
+                    <p className={"tableHeader"}>Your budgets:</p>
+                    {budgets.map(item => (
+                        <p key={`movie-${item.id}`} className={"item"}>- {item.name}</p>
+                    ))}
+                </div>
 
-            <div className={"list"}>
-                <p className={"row"}>asd</p>
+                <div className={"list"}>
+                    <p>Budgets shared with you:</p>
+                    <p className={"row"}>TU BEDZIE TABELA</p>
+                </div>
             </div>
         )
     }

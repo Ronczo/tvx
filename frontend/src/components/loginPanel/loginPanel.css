@@ -1,8 +1,6 @@
 
 html {
   background: #b5c0ad;
-  min-height: 720px;
-  min-width: 320px;
 }
 
 html,
@@ -14,8 +12,7 @@ body {
 
 
 .loginPanel {
-  float:left;
-  overflow:auto;
+
   background: #fff;
   border-radius: 4px;
   box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
@@ -27,8 +24,7 @@ body {
 }
 
 .userInfo {
-  float:left;
-  overflow:auto;
+
   background: #ffff;
   border-radius: 4px;
   box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
