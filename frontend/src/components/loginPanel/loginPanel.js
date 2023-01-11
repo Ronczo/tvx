@@ -26,7 +26,7 @@ const LoginPanel = () => {
                 console.log(err);
             }
         }
-    });
+    }, []);
 
     let handleRegistration = async (e) => {
         e.preventDefault();
@@ -75,6 +75,7 @@ const LoginPanel = () => {
                 localStorage.setItem('access', data["access"]);
                 localStorage.setItem('refresh', data["refresh"]);
                 setAccess(data["access"])
+                window.location.reload(false)
             });
         } catch (err) {
             console.log(err);
