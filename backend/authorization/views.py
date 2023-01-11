@@ -1,4 +1,4 @@
-from authorization.serializers import UserSerializer
+from authorization.serializers import UserCreateSerializer, UserSerializer
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from rest_framework import mixins, status
@@ -15,3 +15,10 @@ class UserViewSet(
 ):
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        write_serializer = UserCreateSerializer(data=request.data)
+        if write_serializer.is_valid(raise_exception=True):
+            instance = write_serializer.save()
+            read_serializer = self.serializer_class(instance=instance)
+            return Response(read_serializer.data, status=status.HTTP_201_CREATED)
