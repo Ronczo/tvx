@@ -83,5 +83,4 @@ const LoginPanel = () => {
     );
 }
 
-
 export default LoginPanel;
