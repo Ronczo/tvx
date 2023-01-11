@@ -12,7 +12,7 @@ class Budget(models.Model):
     allowed_to = models.ManyToManyField(User, related_name="budget", null=True, blank=True)
 
     def __str__(self):
-        return f"Budget of {self.user.username}"
+        return f"{self.name} - budget of {self.user.username}"
 
     def get_username(self):
         return self.user.username
@@ -49,7 +49,7 @@ class Transaction(models.Model):
         max_length=7,
         choices=TransactionType.choices,
     )
-    budget = models.ForeignKey(Budget, related_name="transactions", on_delete=models.PROTECT)
+    budget = models.ForeignKey(Budget, related_name="transactions", on_delete=models.CASCADE)
     category = models.ForeignKey(
         TransactionCategory, related_name="transactions", on_delete=models.PROTECT
     )
