@@ -6,6 +6,7 @@ from django.db.models import QuerySet
 from django_filters import rest_framework
 from rest_framework import mixins, status
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
@@ -36,6 +37,11 @@ class BudgetViewSet(
         user_id: str = str(request.user.id)
         user: User = User.objects.get(id=user_id)
         queryset: QuerySet = Budget.objects.filter(user=user)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            data = BudgetSerializer(instance=queryset, many=True).data
+            return self.get_paginated_response(data)
+
         serializer: ModelSerializer = BudgetSerializer(instance=queryset, many=True)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
