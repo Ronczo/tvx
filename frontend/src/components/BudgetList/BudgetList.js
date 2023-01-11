@@ -15,7 +15,8 @@ const BudgetList = () => {
     const [previousPage, setPreviousPage] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
     const [modalShareOpen, setModalShareOpen] = useState(false);
-    const [users, setUsers] = useState(false);
+    const [users, setUsers] = useState([]);
+    const [filterCategory, setFilterCategory] = useState("");
 
 
     const openModal = () => {
@@ -34,6 +35,23 @@ const BudgetList = () => {
         setModalShareOpen(false)
     }
 
+
+    const handleFilter = async (e) => {
+        e.preventDefault();
+        try {
+            let res = fetch(`http://127.0.0.1:8000/api/budget/my-budgets?category=${filterCategory}`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            }).then(response => response.json()).then(data => {
+                setBudgets(data["results"])
+                console.log(data)
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     const deleteBudget = async (budgetID) => {
         try {
@@ -55,12 +73,13 @@ const BudgetList = () => {
 
         if (accessToken) {
             try {
-                let res = fetch(`http://127.0.0.1:8000/api/budget/my-budgets`, {
+                let res = fetch(`http://127.0.0.1:8000/api/budget/my-budgets?${filterCategory}`, {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${accessToken}`
                     }
                 }).then(response => response.json()).then(data => {
+
                     setBudgets(data["results"])
                 });
             } catch (err) {
@@ -108,10 +127,20 @@ const BudgetList = () => {
         return (
             <div className={"listWrapper"}>
                 <div className={"list"}>
+
                     <p className={"tableHeader"}>Your budgets:</p>
                     {modalOpen ? <button onClick={closeModal}>Hide form</button> :
                         <button className={"addButton"} onClick={openModal}>Add budget</button>}
                     {modalOpen ? <AddBudgetForm access={accessToken} user={user_id}/> : ""}
+                    <form className="form">
+                        <div className="input-group">
+                            <label htmlFor="user">find by category in transactions</label>
+                            <input type="text" name="filterCategory" placeholder="filterCategory"
+                                   onChange={(e) => setFilterCategory(e.target.value)}
+                            />
+                        </div>
+                        <button className="primary" onClick={handleFilter}>Filter budgets</button>
+                    </form>
                     {budgets.map(item => (
 
                         <>

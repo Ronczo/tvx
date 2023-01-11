@@ -43,12 +43,14 @@ class BudgetViewSet(
         user_id: str = str(request.user.id)
         user: User = User.objects.get(id=user_id)
         queryset: QuerySet = Budget.objects.filter(user=user)
-        page = self.paginate_queryset(queryset)
+        filtered_qs = BudgetFilter(data=self.request.GET, queryset=queryset)
+
+        page = self.paginate_queryset(filtered_qs.qs)
         if page is not None:
-            serializer = BudgetSerializer(instance=queryset, many=True)
+            serializer = BudgetSerializer(instance=filtered_qs.qs, many=True)
             return self.get_paginated_response(serializer.data)
 
-        serializer: ModelSerializer = BudgetSerializer(instance=queryset, many=True)
+        serializer: ModelSerializer = BudgetSerializer(instance=filtered_qs.qs, many=True)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(methods=["POST"], detail=False, url_path="share")

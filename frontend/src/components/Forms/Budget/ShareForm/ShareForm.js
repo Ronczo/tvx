@@ -53,7 +53,6 @@ const ShareForm = ({access, budget, users}) => {
                 </div>
                 <button className="primary" onClick={handleShareBudget}>Share budget</button>
             </form>
-
         </div>
     )
 }

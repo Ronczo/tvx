@@ -6,7 +6,7 @@ class BudgetFilter(django_filters.FilterSet):
     """Filter budget by category if any transaction in Budget includes given category"""
 
     category = django_filters.CharFilter(
-        lookup_expr="icontains", field_name="transaction__category__name"
+        lookup_expr="icontains", field_name="transactions__category__name"
     )
 
     class Meta:
