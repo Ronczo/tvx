@@ -52,8 +52,6 @@ const BudgetDetail = () => {
             console.log(err);
         }
     }
-
-
         return (
             <div>
                 <div>
@@ -68,6 +66,7 @@ const BudgetDetail = () => {
                             <p key={`transaction-${transaction.id}`}>Category: {transaction.category}</p>
                             <p key={`transaction-${transaction.id}`}>Kind: {transaction.kind}</p>
                             <p key={`transaction-${transaction.id}`}>Value: {transaction.value}</p>
+                            <button className={"editButton"} onClick={() => deleteTransaction(transaction.id)}>Edit transaction</button>
                             <button className={"deleteButton"} onClick={() => deleteTransaction(transaction.id)}>Delete transaction</button>
                             <hr/>
                         </>

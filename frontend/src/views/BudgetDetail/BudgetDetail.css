@@ -1,7 +1,14 @@
 .deleteButton {
+    margin: 10px;
     background-color: red;
 }
 
 .addButton {
+    margin: 10px;
     background-color: #1abc9c;
+}
+
+.editButton {
+    margin: 10px;
+    background-color: #a8c787;
 }
