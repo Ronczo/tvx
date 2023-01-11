@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from "react";
+import {NavLink} from "react-router-dom";
+import AddForm from "../../components/AddForm/AddForm";
 
 const BudgetDetail = () => {
     const accessToken = localStorage.getItem("access")
@@ -6,6 +8,15 @@ const BudgetDetail = () => {
     const itemID = split_url[split_url.length - 1];
     const [item, setItem] = useState({});
     const [transactions, setTransactions] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const openModal = () => {
+        setModalOpen(true)
+    }
+
+    const closeModal = () => {
+        setModalOpen(false)
+    }
 
     useEffect(() => {
         if (accessToken) {
@@ -28,19 +39,21 @@ const BudgetDetail = () => {
 
     return (
         <div>
-            <div >
+            <div>
                 <h2>{item.name}</h2>
                 <h3>Balance: {item.balance}</h3>
                 <h3>Transactions:</h3>
+                {modalOpen ? <button onClick={closeModal}>Hide form</button> :
+                    <button onClick={openModal}>Add transaction</button>}
+                {modalOpen ? <AddForm budgetID={itemID} access={accessToken}/> : ""}
                 {transactions.map(transaction => (
-                        <>
-                            <p key={`transaction-${transaction.id}`}>Category: {transaction.category}</p>
-                            <p key={`transaction-${transaction.id}`}>Kind: {transaction.kind}</p>
-                            <p key={`transaction-${transaction.id}`}>Value: {transaction.value}</p>
-                            <hr />
-                        </>
-                    ))}
-
+                    <>
+                        <p key={`transaction-${transaction.id}`}>Category: {transaction.category}</p>
+                        <p key={`transaction-${transaction.id}`}>Kind: {transaction.kind}</p>
+                        <p key={`transaction-${transaction.id}`}>Value: {transaction.value}</p>
+                        <hr/>
+                    </>
+                ))}
             </div>
         </div>
     )
