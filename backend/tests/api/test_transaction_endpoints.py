@@ -49,7 +49,6 @@ def test_post(client, user, kind_type):
     payload = {"category": "my_category", "kind": kind_type, "budget": budget.id}
     total_amount = Transaction.objects.all().count()
     response: Response = client.post(f"/api/transaction/", payload)
-    print("ddd", response.data)
     if kind_type != "something":
         assert response.status_code == 201
         assert total_amount + 1 == Transaction.objects.all().count()
