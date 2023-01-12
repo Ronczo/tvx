@@ -7,9 +7,9 @@ from django.db import migrations
 
 def generate_superuser(apps, schema_editor):
     user_model = get_user_model()
-    username = os.environ.get("DJANGO_SUPER_USER_USERNAME")
-    email = os.environ.get("DJANGO_SUPER_USER_EMAIL")
-    password = os.environ.get("DJANGO_SUPER_USER_PASSWORD")
+    username = os.environ.get("DJANGO_SUPER_USER_USERNAME", "a")
+    email = os.environ.get("DJANGO_SUPER_USER_EMAIL", "a@a.pl")
+    password = os.environ.get("DJANGO_SUPER_USER_PASSWORD", "a")
     if not user_model.objects.filter(username=username, email=email).exists():
 
         admin = user_model.objects.create_superuser(
