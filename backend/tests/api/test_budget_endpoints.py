@@ -97,3 +97,23 @@ def test_share(client, user, budget_factory):
     assert response.status_code == 200
     assert response.data == f"Budget shared with user {user.username}"
     assert user in new_budget.allowed_to.all()
+
+
+@pytest.mark.django_db
+def test_shared_with_me(client, user):
+    response: Response = client.get(f"/api/budget/shared-with-me/")
+
+    # check pagination
+    expected_fields: List[str] = ["count", "next", "previous", "results"]
+    assert all([field in response.data.keys() for field in expected_fields])
+
+    # check single item structure
+    for item in response.data["results"]:
+        assert all(
+            [field in item.keys() for field in ["id", "transactions", "balance", "user", "name"]]
+        )
+        # Check if every budget bis shared with user
+        budget = Budget.objects.get(id=item["id"])
+        assert user in budget.allowed_to.all()
+
+    assert response.status_code == 200
