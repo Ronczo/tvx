@@ -65,3 +65,23 @@ def test_post(client, user):
     response: Response = client.post(f"/api/budget/", payload)
     assert response.status_code == 201
     assert total_amount + 1 == Budget.objects.all().count()
+
+
+@pytest.mark.django_db
+def test_my_budgets(client, user):
+    response: Response = client.get(f"/api/budget/my-budgets/")
+
+    assert response.status_code == 200
+
+    # check pagination
+    expected_fields: List[str] = ["count", "next", "previous", "results"]
+    assert all([field in response.data.keys() for field in expected_fields])
+
+    # check single item structure
+    for item in response.data["results"]:
+        assert all(
+            [field in item.keys() for field in ["id", "transactions", "balance", "user", "name"]]
+        )
+        # Check if every budget belongs to user
+        budget = Budget.objects.get(id=item["id"])
+        assert budget.user.id == user.id
