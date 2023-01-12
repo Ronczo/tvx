@@ -1,9 +1,8 @@
 from random import choice, randint
 
-import factory
+import factory.fuzzy
 from core.models import Budget, Transaction, TransactionCategory
 from django.contrib.auth.models import User
-from factory import Faker
 
 KINDS = ["income", "expanse"]
 CATEGORIES = ["food", "school", "tax", "home", "trip", "other"]
@@ -13,16 +12,16 @@ class TransactionCategoryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = TransactionCategory
 
-    name = choice(CATEGORIES)
+    name = factory.fuzzy.FuzzyChoice(CATEGORIES)
 
 
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
 
-    username = Faker("name")
-    password = Faker("password")
-    email = Faker("email")
+    username = factory.Faker("name")
+    password = factory.Faker("password")
+    email = factory.Faker("email")
 
 
 class BudgetFactory(factory.django.DjangoModelFactory):
@@ -45,7 +44,7 @@ class TransactionFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Transaction
 
-    kind = choice(KINDS)
+    kind = factory.fuzzy.FuzzyChoice(KINDS)
     value = randint(0, 100)
     budget = factory.Iterator(Budget.objects.all())
     category = factory.SubFactory(TransactionCategoryFactory)
