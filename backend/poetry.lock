@@ -233,6 +233,21 @@ tomli = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "xmlschema"]
 
 [[package]]
+name = "pytest-django"
+version = "4.5.2"
+description = "A Django plugin for pytest."
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[package.dependencies]
+pytest = ">=5.4.0"
+
+[package.extras]
+docs = ["sphinx", "sphinx-rtd-theme"]
+testing = ["django", "django-configurations (>=2.0)"]
+
+[[package]]
 name = "pytest-factoryboy"
 version = "2.5.1"
 description = "Factory Boy support for pytest."
@@ -319,7 +334,7 @@ python-versions = ">=2"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "3813b08abbfae98656f85456853df9bc3ce908d6fa97126b9fee0a46b4e1c651"
+content-hash = "6860acd4e02699bfc18bc2cf31a66a0383fa2440a465fbcdfb4c2a107a56d8cc"
 
 [metadata.files]
 asgiref = []
@@ -358,6 +373,7 @@ pluggy = []
 psycopg2-binary = []
 pyjwt = []
 pytest = []
+pytest-django = []
 pytest-factoryboy = []
 python-dateutil = []
 python-dotenv = []
