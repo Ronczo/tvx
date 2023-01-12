@@ -18,10 +18,14 @@ register(TransactionFactory)
 
 @pytest.fixture
 def client():
-    return APIClient()
+    client = APIClient()
+    user = User.objects.first()
+    access = AccessToken.for_user(user)
+    client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+    return client
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture()
 def user():
     user = User.objects.first()
     access = AccessToken.for_user(user)
