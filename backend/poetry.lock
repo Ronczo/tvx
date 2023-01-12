@@ -171,6 +171,20 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "isort"
+version = "5.11.4"
+description = "A Python utility / library to sort Python imports."
+category = "main"
+optional = false
+python-versions = ">=3.7.0"
+
+[package.extras]
+colors = ["colorama (>=0.4.3,<0.5.0)"]
+requirements-deprecated-finder = ["pip-api", "pipreqs"]
+pipfile-deprecated-finder = ["pipreqs", "requirementslib"]
+plugins = ["setuptools"]
+
+[[package]]
 name = "packaging"
 version = "23.0"
 description = "Core utilities for Python packages"
@@ -334,7 +348,7 @@ python-versions = ">=2"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "6860acd4e02699bfc18bc2cf31a66a0383fa2440a465fbcdfb4c2a107a56d8cc"
+content-hash = "18a79e338c3ab322bff964780439135e34a9c3484c54928e3bbac60aef823442"
 
 [metadata.files]
 asgiref = []
@@ -368,6 +382,7 @@ factory-boy = []
 faker = []
 inflection = []
 iniconfig = []
+isort = []
 packaging = []
 pluggy = []
 psycopg2-binary = []
