@@ -3,17 +3,12 @@ from django.contrib.auth.models import User
 from pytest_factoryboy import register
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import AccessToken
-from tests.factories import (
-    BudgetFactory,
-    TransactionCategoryFactory,
-    TransactionFactory,
-    UserFactory,
-)
+from tests.factories import TransactionCategoryFactory, TransactionFactory
 
 register(TransactionCategoryFactory)
-register(UserFactory)
-register(BudgetFactory)
 register(TransactionFactory)
+
+CATEGORIES = ["food", "school", "tax", "home", "trip", "other"]
 
 
 @pytest.fixture
@@ -25,21 +20,11 @@ def client():
     return client
 
 
-@pytest.fixture()
-def user():
-    user = User.objects.first()
-    access = AccessToken.for_user(user)
-    return (user, access)
-
-
 @pytest.fixture(autouse=True)
-def db_imitation(user_factory, budget_factory, transaction_factory):
-    # Create users.
-    for _ in range(21):
-        user_factory.create()
-    # Create budgets
-    for _ in range(30):
-        budget_factory.create()
+def mock_objects(transaction_factory, transaction_category_factory):
+    # Create categories
+    for category in CATEGORIES:
+        transaction_category_factory.create(name=category)
     # Create transactions
-    for _ in range(100):
+    for _ in range(10):
         transaction_factory.create()

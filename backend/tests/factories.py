@@ -1,10 +1,10 @@
-from random import choice, randint
+from random import randint
 
 import factory.fuzzy
 from core.models import Budget, Transaction, TransactionCategory
 from django.contrib.auth.models import User
 
-KINDS = ["income", "expanse"]
+KINDS = ("income", "expanse")
 CATEGORIES = ["food", "school", "tax", "home", "trip", "other"]
 
 
@@ -12,7 +12,9 @@ class TransactionCategoryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = TransactionCategory
 
-    name = factory.fuzzy.FuzzyChoice(CATEGORIES)
+    @factory.post_generation
+    def name(self, name, extracted, **kwargs):
+        self.name = extracted
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -28,7 +30,7 @@ class BudgetFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Budget
 
-    user = factory.Iterator(User.objects.all())
+    user = factory.SubFactory(UserFactory)
     name = f"test{randint(0,20)}"
 
     @factory.post_generation
@@ -45,6 +47,6 @@ class TransactionFactory(factory.django.DjangoModelFactory):
         model = Transaction
 
     kind = factory.fuzzy.FuzzyChoice(KINDS)
-    value = randint(0, 100)
-    budget = factory.Iterator(Budget.objects.all())
-    category = factory.SubFactory(TransactionCategoryFactory)
+    value = factory.fuzzy.FuzzyInteger(0, 100)
+    budget = factory.SubFactory(BudgetFactory)
+    category = factory.fuzzy.FuzzyChoice(TransactionCategory.objects.all())
