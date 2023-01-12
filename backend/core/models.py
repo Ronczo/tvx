@@ -30,8 +30,8 @@ class Budget(models.Model):
 
 
 class TransactionType(models.TextChoices):
-    PL = "income", ("income")
-    EN = "expanse", ("expanse")
+    IN = "income", ("income")
+    EX = "expanse", ("expanse")
 
 
 class TransactionCategory(models.Model):
