@@ -23,6 +23,7 @@ class BudgetViewSet(
     mixins.RetrieveModelMixin,
     mixins.ListModelMixin,
     mixins.DestroyModelMixin,
+    mixins.UpdateModelMixin,
     GenericViewSet,
 ):
     permission_classes = (IsAuthenticated,)

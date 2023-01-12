@@ -59,6 +59,16 @@ def test_delete(client, budget_factory):
 
 
 @pytest.mark.django_db
+def test_patch(client, budget_factory):
+    budget_to_edit = budget_factory()
+    payload = {"name": "new_name"}
+    response: Response = client.patch(f"/api/budget/{budget_to_edit.id}/", payload)
+    assert response.status_code == 200
+    budget = Budget.objects.get(id=budget_to_edit.id)
+    assert budget.name == payload["name"]
+
+
+@pytest.mark.django_db
 def test_post(client, user):
     payload = {"name": "test", "user": user.id}
     total_amount = Budget.objects.all().count()
