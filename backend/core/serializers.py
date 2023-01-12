@@ -1,5 +1,6 @@
-from core.models import Budget, Transaction, TransactionCategory
 from rest_framework import serializers
+
+from core.models import Budget, Transaction, TransactionCategory
 
 
 class TransactionSerializer(serializers.ModelSerializer):
@@ -28,7 +29,9 @@ class TransactionCreateSerializer(serializers.ModelSerializer):
         ref_name = "Transaction serializer"
 
     def create(self, validated_data):
-        category, _ = TransactionCategory.objects.get_or_create(name=validated_data.get("category"))
+        category, _ = TransactionCategory.objects.get_or_create(
+            name=validated_data.get("category")
+        )
         validated_data["category"] = category
         return super().create(validated_data)
 

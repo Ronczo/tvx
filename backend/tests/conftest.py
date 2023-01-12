@@ -3,7 +3,12 @@ from django.contrib.auth.models import User
 from pytest_factoryboy import register
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import AccessToken
-from tests.factories import BudgetFactory, TransactionCategoryFactory, TransactionFactory
+
+from tests.factories import (
+    BudgetFactory,
+    TransactionCategoryFactory,
+    TransactionFactory,
+)
 
 register(TransactionCategoryFactory)
 register(TransactionFactory)

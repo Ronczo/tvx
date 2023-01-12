@@ -1,9 +1,10 @@
 from typing import List
 
 import pytest
-from core.models import Budget
 from django.db.models import Q
 from rest_framework.response import Response
+
+from core.models import Budget
 
 
 @pytest.mark.django_db
@@ -19,7 +20,10 @@ def test_fetching_list(client):
     # check single item structure
     for item in response.data["results"]:
         assert all(
-            [field in item.keys() for field in ["id", "transactions", "balance", "user", "name"]]
+            [
+                field in item.keys()
+                for field in ["id", "transactions", "balance", "user", "name"]
+            ]
         )
 
     # check filtering
@@ -90,7 +94,10 @@ def test_my_budgets(client, user):
     # check single item structure
     for item in response.data["results"]:
         assert all(
-            [field in item.keys() for field in ["id", "transactions", "balance", "user", "name"]]
+            [
+                field in item.keys()
+                for field in ["id", "transactions", "balance", "user", "name"]
+            ]
         )
         # Check if every budget belongs to user
         budget = Budget.objects.get(id=item["id"])
@@ -120,7 +127,10 @@ def test_shared_with_me(client, user):
     # check single item structure
     for item in response.data["results"]:
         assert all(
-            [field in item.keys() for field in ["id", "transactions", "balance", "user", "name"]]
+            [
+                field in item.keys()
+                for field in ["id", "transactions", "balance", "user", "name"]
+            ]
         )
         # Check if every budget bis shared with user
         budget = Budget.objects.get(id=item["id"])

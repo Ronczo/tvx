@@ -1,8 +1,9 @@
 from typing import List
 
 import pytest
-from core.models import Budget, Transaction
 from rest_framework.response import Response
+
+from core.models import Budget, Transaction
 
 
 @pytest.mark.django_db
@@ -17,7 +18,9 @@ def test_fetching_list(client):
 
     # # check single item structure
     for item in response.data["results"]:
-        assert all([field in item.keys() for field in ["id", "category", "value", "kind"]])
+        assert all(
+            [field in item.keys() for field in ["id", "category", "value", "kind"]]
+        )
         assert item["kind"] in ["income", "expanse"]
 
 
@@ -27,7 +30,9 @@ def test_fetching_retrieve(client, user):
     response: Response = client.get(f"/api/transaction/{transaction.id}/")
 
     assert response.status_code == 200
-    assert all([field in response.data.keys() for field in ["id", "category", "value", "kind"]])
+    assert all(
+        [field in response.data.keys() for field in ["id", "category", "value", "kind"]]
+    )
 
 
 @pytest.mark.django_db
@@ -61,7 +66,9 @@ def test_post(client, user, kind_type):
 def test_patch(client, transaction_factory):
     transaction_to_edit = transaction_factory()
     payload = {"value": 153, "kind": "expanse", "category": "new_new_category"}
-    response: Response = client.patch(f"/api/transaction/{transaction_to_edit.id}/", payload)
+    response: Response = client.patch(
+        f"/api/transaction/{transaction_to_edit.id}/", payload
+    )
     assert response.status_code == 200
     transaction = Transaction.objects.get(id=transaction_to_edit.id)
     assert transaction.value == payload["value"]

@@ -1,3 +1,13 @@
+from django.contrib.auth.models import User
+from django.db.models import QuerySet
+from django_filters import rest_framework
+from rest_framework import mixins, status
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.serializers import ModelSerializer
+from rest_framework.viewsets import GenericViewSet
+
 from core.filters import BudgetFilter
 from core.models import Budget, Transaction
 from core.permissions import IsBudgetSharedPermission
@@ -8,15 +18,6 @@ from core.serializers import (
     TransactionCreateSerializer,
     TransactionSerializer,
 )
-from django.contrib.auth.models import User
-from django.db.models import QuerySet
-from django_filters import rest_framework
-from rest_framework import mixins, status
-from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.serializers import ModelSerializer
-from rest_framework.viewsets import GenericViewSet
 
 
 class BudgetViewSet(
@@ -28,7 +29,9 @@ class BudgetViewSet(
 ):
     permission_classes = (IsAuthenticated,)
     serializer_class = BudgetSerializer
-    queryset = Budget.objects.all().prefetch_related("transactions").select_related("user")
+    queryset = (
+        Budget.objects.all().prefetch_related("transactions").select_related("user")
+    )
     filter_backends = (rest_framework.DjangoFilterBackend,)
     filterset_class = BudgetFilter
     filterset_fields = ("category",)
@@ -49,7 +52,9 @@ class BudgetViewSet(
         user_id: str = str(request.user.id)
         user: User = User.objects.get(id=user_id)
         queryset: QuerySet = (
-            Budget.objects.filter(user=user).prefetch_related("transactions").select_related("user")
+            Budget.objects.filter(user=user)
+            .prefetch_related("transactions")
+            .select_related("user")
         )
         filtered_qs = BudgetFilter(data=self.request.GET, queryset=queryset)
 
@@ -58,7 +63,9 @@ class BudgetViewSet(
             serializer = BudgetSerializer(instance=filtered_qs.qs, many=True)
             return self.get_paginated_response(serializer.data)
 
-        serializer: ModelSerializer = BudgetSerializer(instance=filtered_qs.qs, many=True)
+        serializer: ModelSerializer = BudgetSerializer(
+            instance=filtered_qs.qs, many=True
+        )
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(methods=["POST"], detail=False, url_path="share")
@@ -73,7 +80,9 @@ class BudgetViewSet(
                 user: User = User.objects.get(id=user_id)
                 budget.allowed_to.add(user)
                 budget.save()
-                return Response(f"Budget shared with user {user}", status=status.HTTP_200_OK)
+                return Response(
+                    f"Budget shared with user {user}", status=status.HTTP_200_OK
+                )
             except (Budget.DoesNotExist, User.DoesNotExist):
                 return Response("There is no budget or User with given id")
 

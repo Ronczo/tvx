@@ -1,8 +1,9 @@
 from random import randint
 
 import factory.fuzzy
-from core.models import Budget, Transaction, TransactionCategory
 from django.contrib.auth.models import User
+
+from core.models import Budget, Transaction, TransactionCategory
 
 KINDS = ("income", "expanse")
 CATEGORIES = ["food", "school", "tax", "home", "trip", "other"]

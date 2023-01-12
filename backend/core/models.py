@@ -9,7 +9,9 @@ class Budget(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
     user = models.ForeignKey(User, related_name="budgets", on_delete=models.CASCADE)
-    allowed_to = models.ManyToManyField(User, related_name="budget", null=True, blank=True)
+    allowed_to = models.ManyToManyField(
+        User, related_name="budget", null=True, blank=True
+    )
 
     def __str__(self):
         return f"{self.name} - budget of {self.user.username}"
@@ -21,7 +23,9 @@ class Budget(models.Model):
     def budget_balance(self):
         transactions = Transaction.objects.filter(budget=self)
         incomes_value = transactions.filter(kind="income").aggregate(value=Sum("value"))
-        expanes_value = transactions.filter(kind="expanse").aggregate(value=Sum("value"))
+        expanes_value = transactions.filter(kind="expanse").aggregate(
+            value=Sum("value")
+        )
         if not incomes_value["value"]:
             incomes_value["value"] = 0
         if not expanes_value["value"]:
@@ -49,13 +53,17 @@ class Transaction(models.Model):
         max_length=7,
         choices=TransactionType.choices,
     )
-    budget = models.ForeignKey(Budget, related_name="transactions", on_delete=models.CASCADE)
+    budget = models.ForeignKey(
+        Budget, related_name="transactions", on_delete=models.CASCADE
+    )
     category = models.ForeignKey(
         TransactionCategory, related_name="transactions", on_delete=models.PROTECT
     )
 
     def __str__(self):
-        return f"{self.value}$ {self.kind} in {self.budget.user}' budget {self.budget.id}"
+        return (
+            f"{self.value}$ {self.kind} in {self.budget.user}' budget {self.budget.id}"
+        )
 
     @property
     def get_category(self):
