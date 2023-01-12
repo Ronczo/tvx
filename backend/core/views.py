@@ -27,7 +27,7 @@ class BudgetViewSet(
 ):
     permission_classes = (IsAuthenticated,)
     serializer_class = BudgetSerializer
-    queryset = Budget.objects.all()
+    queryset = Budget.objects.all().prefetch_related("transactions").select_related("user")
     filter_backends = (rest_framework.DjangoFilterBackend,)
     filterset_class = BudgetFilter
     filterset_fields = ("category",)
@@ -47,7 +47,9 @@ class BudgetViewSet(
     def my_budgets(self, request):
         user_id: str = str(request.user.id)
         user: User = User.objects.get(id=user_id)
-        queryset: QuerySet = Budget.objects.filter(user=user)
+        queryset: QuerySet = (
+            Budget.objects.filter(user=user).prefetch_related("transactions").select_related("user")
+        )
         filtered_qs = BudgetFilter(data=self.request.GET, queryset=queryset)
 
         page = self.paginate_queryset(filtered_qs.qs)
@@ -78,7 +80,11 @@ class BudgetViewSet(
     def shared_with_me(self, request):
         user_id: str = str(request.user.id)
         user: User = User.objects.get(id=user_id)
-        shared_budgets = Budget.objects.filter(allowed_to=user)
+        shared_budgets = (
+            Budget.objects.filter(allowed_to=user)
+            .prefetch_related("transactions")
+            .select_related("user")
+        )
         page = self.paginate_queryset(shared_budgets)
         if page is not None:
             serializer = BudgetSerializer(instance=shared_budgets, many=True)
@@ -96,7 +102,7 @@ class TransactionViewSet(
 ):
     permission_classes = (IsAuthenticated,)
     serializer_class = TransactionSerializer
-    queryset = Transaction.objects.all()
+    queryset = Transaction.objects.all().select_related("category")
 
     def create(self, request, *args, **kwargs):
         write_serializer = TransactionCreateSerializer(data=request.data)
