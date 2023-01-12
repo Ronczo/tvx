@@ -55,3 +55,15 @@ def test_post(client, user, kind_type):
     else:
         assert response.status_code == 400
         assert total_amount == Transaction.objects.all().count()
+
+
+@pytest.mark.django_db
+def test_patch(client, transaction_factory):
+    transaction_to_edit = transaction_factory()
+    payload = {"value": 153, "kind": "expanse", "category": "new_new_category"}
+    response: Response = client.patch(f"/api/transaction/{transaction_to_edit.id}/", payload)
+    assert response.status_code == 200
+    transaction = Transaction.objects.get(id=transaction_to_edit.id)
+    assert transaction.value == payload["value"]
+    assert transaction.kind == payload["kind"]
+    assert transaction.category.name == payload["category"]

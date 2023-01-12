@@ -31,8 +31,3 @@ def mock_objects(transaction_factory, transaction_category_factory):
 @pytest.fixture()
 def user():
     return User.objects.last()
-
-
-# @pytest.fixture()
-# def new_budget(budget_factory):
-#     return budget_factory()

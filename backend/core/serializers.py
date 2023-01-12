@@ -13,13 +13,10 @@ class TransactionSerializer(serializers.ModelSerializer):
         ref_name = "Transaction serializer"
 
     def update(self, instance, validated_data):
-        print("ccc", validated_data)
-        category, _ = TransactionCategory.objects.get_or_create(
-            name=validated_data.get("get_category")
-        )
+        category_name = validated_data.pop("get_category")
+        category, _ = TransactionCategory.objects.get_or_create(name=category_name)
         instance.category = category
-        instance.save()
-        return instance
+        return super().update(instance, validated_data)
 
 
 class TransactionCreateSerializer(serializers.ModelSerializer):
