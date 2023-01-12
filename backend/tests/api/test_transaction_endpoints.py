@@ -28,3 +28,31 @@ def test_fetching_retrieve(client, user):
 
     assert response.status_code == 200
     assert all([field in response.data.keys() for field in ["id", "category", "value", "kind"]])
+
+
+@pytest.mark.django_db
+def test_delete(client, transaction_factory):
+    factory_to_delete = transaction_factory()
+    total_amount = Transaction.objects.all().count()
+    response: Response = client.delete(f"/api/transaction/{factory_to_delete.id}/")
+    assert response.status_code == 204
+    assert Transaction.objects.all().count() == total_amount - 1
+
+
+@pytest.mark.parametrize(
+    "kind_type",
+    ["income", "expanse", "something"],
+)
+@pytest.mark.django_db
+def test_post(client, user, kind_type):
+    budget = Budget.objects.filter(user=user).first()
+    payload = {"category": "my_category", "kind": kind_type, "budget": budget.id}
+    total_amount = Transaction.objects.all().count()
+    response: Response = client.post(f"/api/transaction/", payload)
+    print("ddd", response.data)
+    if kind_type != "something":
+        assert response.status_code == 201
+        assert total_amount + 1 == Transaction.objects.all().count()
+    else:
+        assert response.status_code == 400
+        assert total_amount == Transaction.objects.all().count()
