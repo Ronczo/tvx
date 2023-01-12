@@ -11,6 +11,8 @@ const BudgetDetail = () => {
     const [item, setItem] = useState({});
     const [transactions, setTransactions] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
+    const [authMessage, setAuthMessage] = useState(false);
+
 
     const openModal = () => {
         setModalOpen(true)
@@ -28,10 +30,15 @@ const BudgetDetail = () => {
                     headers: {
                         Authorization: `Bearer ${accessToken}`
                     }
-                }).then(response => response.json()).then(data => {
+                }).then(response => {
+                    if (response.status === 403) {
+                        setAuthMessage("You don't have permission to this budget")
+                    } else {
+                        return response.json()
+                    }
+                }).then(data => {
                     setItem(data)
                     setTransactions(data.transactions)
-                    console.log(data.transactions)
                 });
             } catch (err) {
                 console.log(err);
@@ -54,12 +61,19 @@ const BudgetDetail = () => {
             console.log(err);
         }
     }
-        if (!accessToken) {
+    if (!accessToken) {
         return (
             <div className={"notLogged"}>
                 <p>Log in first</p>
             </div>
-        ) } else {
+        )
+    } else if (authMessage) {
+        return (
+            <div className={"notLogged"}>
+                <p>{authMessage}</p>
+            </div>
+        )
+    } else {
         return (
             <div>
                 <div>
@@ -75,7 +89,9 @@ const BudgetDetail = () => {
                             <p key={`transaction-${transaction.id}`}>Kind: {transaction.kind}</p>
                             <p key={`transaction-${transaction.id}`}>Value: {transaction.value}</p>
 
-                            <button className={"deleteButton"} onClick={() => deleteTransaction(transaction.id)}>Delete transaction</button>
+                            <button className={"deleteButton"} onClick={() => deleteTransaction(transaction.id)}>Delete
+                                transaction
+                            </button>
                             <hr/>
                         </>
                     ))}
@@ -85,4 +101,4 @@ const BudgetDetail = () => {
         )
     }
 }
-    export default BudgetDetail;
+export default BudgetDetail;

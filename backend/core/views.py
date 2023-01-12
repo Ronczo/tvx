@@ -1,5 +1,6 @@
 from core.filters import BudgetFilter
 from core.models import Budget, Transaction
+from core.permissions import IsBudgetSharedPermission
 from core.serializers import (
     BudgetCreateSerializer,
     BudgetSerializer,
@@ -38,6 +39,10 @@ class BudgetViewSet(
             read_serializer = self.serializer_class(instance=instance)
             return Response(read_serializer.data, status=status.HTTP_201_CREATED)
 
+    def retrieve(self, request, *args, **kwargs):
+        self.permission_classes = [IsBudgetSharedPermission]
+        return super().retrieve(request, *args, **kwargs)
+
     @action(methods=["GET"], detail=False, url_path="my-budgets")
     def my_budgets(self, request):
         user_id: str = str(request.user.id)
@@ -55,6 +60,7 @@ class BudgetViewSet(
 
     @action(methods=["POST"], detail=False, url_path="share")
     def share(self, request):
+        IsBudgetSharedPermission()
         serializer = BudgetShareSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             budget_id: str = request.data.get("budget")
