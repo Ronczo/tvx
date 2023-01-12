@@ -85,3 +85,15 @@ def test_my_budgets(client, user):
         # Check if every budget belongs to user
         budget = Budget.objects.get(id=item["id"])
         assert budget.user.id == user.id
+
+
+@pytest.mark.django_db
+def test_share(client, user, budget_factory):
+    new_budget = budget_factory()
+
+    payload = {"user": user.id, "budget": new_budget.id}
+    response: Response = client.post(f"/api/budget/share/", payload)
+
+    assert response.status_code == 200
+    assert response.data == f"Budget shared with user {user.username}"
+    assert user in new_budget.allowed_to.all()
